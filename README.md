@@ -1,3 +1,6 @@
+<img width="1182" height="888" alt="main-interface" src="https://github.com/user-attachments/assets/8f420af6-5ac4-4a82-8bcf-66d55c2f8c8d" />
+
+
 # ComfyUI Launcher Pro 🚀
 
 **Advanced Launcher for ComfyUI** is a desktop application (Electron) that simplifies configuring and running the ComfyUI environment.
