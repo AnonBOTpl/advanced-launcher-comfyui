@@ -1,6 +1,6 @@
 {
   "name": "comfyui-launcher-pro",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Advanced launcher and manager for ComfyUI with professional features and intuitive interface",
   "main": "main.js",
   "scripts": {
