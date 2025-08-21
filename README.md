@@ -1,42 +1,48 @@
-# Advanced Launcher for ComfyUI
+# ComfyUI Launcher Pro 🚀
 
-**Advanced Launcher for ComfyUI** is a desktop application (Electron) that simplifies launching and managing ComfyUI.  
-The project allows you to quickly start, configure, and control your ComfyUI workspace.
+Advanced launcher and manager for ComfyUI with professional features and intuitive interface.
 
-## Features
-- Simple interface for launching ComfyUI
-- Start-up parameter configuration
-- Local environment integration
-- Easy installation and usage
+## ✨ Features
 
-## Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/advanced-launcher-comfyui.git
-   cd advanced-launcher-comfyui
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the app:
-   ```bash
-   npm start
-   ```
+- **Profile Management** - Create and manage multiple ComfyUI configurations
+- **Auto-Updates** - Automatic launcher updates to stay current
+- **Smart Interface** - Clean, modern UI with dark/light theme support
+- **Easy Setup** - One-click ComfyUI installation and configuration
+- **Process Management** - Start, stop, and monitor ComfyUI instances
+- **Settings Backup** - Save and restore your configurations
 
-## Project Structure
-```
-index.html   - app interface
-main.js      - Electron main process
-preload.js   - preload script for renderer
-package.json - project configuration and dependencies
-```
+## 📥 Download
 
-## Build
-To build the application for your target OS:
+Get the latest version from [Releases](https://github.com/AnonBOTpl/advanced-launcher-comfyui/releases)
+
+- **Windows:** Download the `.exe` installer
+
+## 💻 System Requirements
+
+- Windows 10/11 (64-bit)
+- 4GB RAM minimum
+- 500MB free disk space
+- Internet connection for updates
+
+## 🔧 Installation
+
+1. Download the latest release from the [Releases page](https://github.com/AnonBOTpl/advanced-launcher-comfyui/releases)
+2. Run the installer as Administrator
+3. Follow the setup wizard
+4. Launch and enjoy!
+
+## 🛠️ Development
+
 ```bash
-npm run build
-```
+# Clone the repository
+git clone https://github.com/AnonBOTpl/advanced-launcher-comfyui.git
 
-## License
-MIT License
+# Install dependencies
+cd advanced-launcher-comfyui
+npm install
+
+# Run in development mode
+npm start
+
+# Build for production
+npm run make
