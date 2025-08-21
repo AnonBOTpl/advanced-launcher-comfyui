@@ -1,13 +1,24 @@
 # Advanced Launcher for ComfyUI
 
-**Advanced Launcher for ComfyUI** to aplikacja desktopowa (Electron), która ułatwia uruchamianie i zarządzanie ComfyUI.  
+**Advanced Launcher for ComfyUI** to aplikacja desktopowa (Electron), która ułatwia konfigurację i uruchamianie środowiska ComfyUI. 
 Projekt pozwala szybko startować, konfigurować oraz kontrolować środowisko pracy z ComfyUI.
 
 ## Funkcje
-- Prosty interfejs do uruchamiania ComfyUI
-- Konfiguracja parametrów startowych
-- Integracja z lokalnym środowiskiem
-- Łatwa instalacja i uruchamianie
+- **Konfiguracja**:
+  - zapisywanie i wczytywanie ustawień,
+  - wybór oraz walidacja ścieżki do ComfyUI.
+- **Uruchamianie ComfyUI**:
+  - start i stop procesu ComfyUI,
+  - instalacja zależności,
+  - monitorowanie, czy proces działa.
+- **Monitorowanie procesów**:
+  - podgląd logów na żywo z ComfyUI,
+  - informacje o uruchomieniu i zakończeniu procesu.
+- **Interfejs użytkownika**:
+  - proste GUI do zarządzania konfiguracją,
+  - przyciski do uruchamiania, zatrzymywania i instalowania zależności,
+  - wyświetlanie logów oraz komunikatów błędów/informacji.
+
 
 ## Instalacja
 1. Sklonuj repozytorium:
