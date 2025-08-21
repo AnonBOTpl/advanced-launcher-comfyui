@@ -1,15 +1,23 @@
 # ComfyUI Launcher Pro 🚀
 
-Advanced launcher and manager for ComfyUI with professional features and intuitive interface.
+**Advanced Launcher for ComfyUI** is a desktop application (Electron) that simplifies configuring and running the ComfyUI environment.
 
 ## ✨ Features
 
-- **Profile Management** - Create and manage multiple ComfyUI configurations
-- **Auto-Updates** - Automatic launcher updates to stay current
-- **Smart Interface** - Clean, modern UI with dark/light theme support
-- **Easy Setup** - One-click ComfyUI installation and configuration
-- **Process Management** - Start, stop, and monitor ComfyUI instances
-- **Settings Backup** - Save and restore your configurations
+- **Configuration**:
+  - save and load user settings,
+  - select and validate the ComfyUI directory.
+- **ComfyUI Management**:
+  - start and stop the ComfyUI process,
+  - install dependencies,
+  - check if ComfyUI is running.
+- **Process Monitoring**:
+  - real-time log output from ComfyUI,
+  - events for process start and exit.
+- **User Interface**:
+  - simple GUI for configuration,
+  - buttons to run, stop, and install dependencies,
+  - display of logs and error/info dialogs.
 
 ## 📥 Download
 
