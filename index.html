@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComfyUI Launcher Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .tab-button.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .tab-button:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .tab-content {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type="text"], input[type="password"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            background: #e9ecef;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .actions {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+            transform: translateY(-2px);
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .output {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-top: 15px;
+        }
+
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .language-selector select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .path-selector {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .path-input {
+            flex: 1;
+        }
+
+        .path-status {
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .path-status.valid {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .path-status.invalid {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* NEW - Dynamic button styles */
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .control-buttons.running {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Status indicator */
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.running {
+            background: #28a745;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.stopped {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="en">English</option>
+            <option value="pl">Polski</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 id="title">ComfyUI Launcher Pro</h1>
+            <p id="subtitle">Advanced launcher for ComfyUI</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="path" data-text="path_tab">Path</button>
+            <button class="tab-button" data-tab="env" data-text="env_tab">Environment</button>
+            <button class="tab-button" data-tab="performance" data-text="performance_tab">Performance</button>
+            <button class="tab-button" data-tab="modes" data-text="modes_tab">Modes</button>
+            <button class="tab-button" data-tab="network" data-text="network_tab">Network</button>
+            <button class="tab-button" data-tab="advanced" data-text="advanced_tab">Advanced</button>
+        </div>
+
+        <!-- Tab Path -->
+        <div class="tab-content active" id="tab-path">
+            <div class="form-group">
+                <label for="comfyuiPath" data-text="comfyui_path_label">ComfyUI Installation Path:</label>
+                <div class="path-selector">
+                    <div class="path-input">
+                        <input type="text" id="comfyuiPath" placeholder="C:\Users\Admin\Desktop\ComfyUI_windows_portable" data-text="path_placeholder">
+                        <div class="help-text" data-text="path_help">Select folder containing python_embeded and ComfyUI directories</div>
+                    </div>
+                    <button class="btn-warning" id="browsePath" data-text="browse_button">Browse</button>
+                </div>
+                <div id="pathStatus" class="path-status" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Tab Environment -->
+        <div class="tab-content" id="tab-env">
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="httpProxy" data-text="http_proxy_label">HTTP Proxy:</label>
+                        <input type="text" id="httpProxy" placeholder="http://localhost:1080">
+                        <div class="help-text" data-text="http_proxy_help">Optional HTTP proxy</div>
+                    </div>
+                    <div class="form-col">
+                        <label for="httpsProxy" data-text="https_proxy_label">HTTPS Proxy:</label>
+                        <input type="text" id="httpsProxy" placeholder="https://localhost:1080">
+                        <div class="help-text" data-text="https_proxy_help">Optional HTTPS proxy</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="hfToken" data-text="hf_token_label">HuggingFace Token:</label>
+                        <input type="password" id="hfToken" placeholder="hf_xxxxxx">
+                        <div class="help-text" data-text="hf_token_help">Optional token for private models</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="pipIndex" data-text="pip_mirror_label">PIP Mirror:</label>
+                        <input type="text" id="pipIndex" placeholder="https://pypi.org/simple">
+                        <div class="help-text" data-text="pip_mirror_help">PIP index URL</div>
+                    </div>
+                    <div class="form-col">
+                        <label for="hfEndpoint" data-text="hf_mirror_label">HuggingFace Mirror:</label>
+                        <input type="text" id="hfEndpoint" placeholder="https://huggingface.co">
+                        <div class="help-text" data-text="hf_mirror_help">HuggingFace endpoint URL</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Performance -->
+        <div class="tab-content" id="tab-performance">
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="lowvram">
+                    <label for="lowvram" data-text="lowvram_label">Low VRAM (&lt; 6GB)</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="fp16Vae">
+                    <label for="fp16Vae" data-text="fp16_vae_label">FP16 VAE (saves VRAM)</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="dontUpcast">
+                    <label for="dontUpcast" data-text="dont_upcast_label">Don't upcast attention</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="disableSmart">
+                    <label for="disableSmart" data-text="disable_smart_label">Disable smart memory</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="fastMode">
+                    <label for="fastMode" data-text="fast_mode_label">Fast mode (RTX 40xx+)</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="pytorchAttention">
+                    <label for="pytorchAttention" data-text="pytorch_attention_label">Disable xFormers</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Modes -->
+        <div class="tab-content" id="tab-modes">
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="cpuMode">
+                    <label for="cpuMode" data-text="cpu_mode_label">CPU mode (very slow!)</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="directml">
+                    <label for="directml" data-text="directml_label">DirectML (AMD/Intel Arc)</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="disableAuto">
+                    <label for="disableAuto" data-text="disable_auto_label">Don't open browser</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Network -->
+        <div class="tab-content" id="tab-network">
+            <div class="form-row">
+                <div class="form-col">
+                    <label for="port" data-text="port_label">Server Port:</label>
+                    <input type="text" id="port" value="8188">
+                    <div class="help-text" data-text="port_help">Default 8188</div>
+                </div>
+                <div class="form-col">
+                    <label for="listen" data-text="listen_label">Listen Address:</label>
+                    <input type="text" id="listen" value="127.0.0.1">
+                    <div class="help-text" data-text="listen_help">127.0.0.1 = localhost, 0.0.0.0 = all</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Advanced -->
+        <div class="tab-content" id="tab-advanced">
+            <div class="form-group">
+                <label for="extraArgs" data-text="extra_args_label">Extra Arguments:</label>
+                <textarea id="extraArgs" rows="3" placeholder="--argument1 value1 --argument2" data-text="extra_args_placeholder"></textarea>
+                <div class="help-text" data-text="extra_args_help">Custom CLI flags separated by spaces</div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+            <div class="button-group">
+                <button class="btn-primary" id="applyBtn" data-text="apply_button">Apply Settings</button>
+                <button class="btn-secondary" id="installBtn" data-text="install_button">Install Dependencies</button>
+                
+                <!-- NEW - Dynamic control buttons for ComfyUI -->
+                <div id="controlButtons" class="control-buttons">
+                    <!-- Default state: Start button -->
+                    <button class="btn-success" id="startBtn" data-text="start_button">
+                        <span class="status-indicator stopped"></span>Start ComfyUI
+                    </button>
+                </div>
+            </div>
+
+            <div id="status" class="status" style="display: none;"></div>
+            <div id="output" class="output" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentConfig = {};
+        let currentLang = 'en'; // Changed to English default
+        let translations = {};
+        let isComfyUIRunning = false; // NEW - Track ComfyUI state
+
+        // Translations object
+        const defaultTranslations = {
+            en: {
+                title: 'ComfyUI Launcher Pro',
+                subtitle: 'Advanced launcher for ComfyUI',
+                path_tab: 'Path',
+                env_tab: 'Environment', 
+                performance_tab: 'Performance',
+                modes_tab: 'Modes',
+                network_tab: 'Network',
+                advanced_tab: 'Advanced',
+                comfyui_path_label: 'ComfyUI Installation Path:',
+                path_placeholder: 'C:\\Users\\Admin\\Desktop\\ComfyUI_windows_portable',
+                path_help: 'Select folder containing python_embeded and ComfyUI directories',
+                browse_button: 'Browse',
+                http_proxy_label: 'HTTP Proxy:',
+                http_proxy_help: 'Optional HTTP proxy',
+                https_proxy_label: 'HTTPS Proxy:',
+                https_proxy_help: 'Optional HTTPS proxy',
+                hf_token_label: 'HuggingFace Token:',
+                hf_token_help: 'Optional token for private models',
+                pip_mirror_label: 'PIP Mirror:',
+                pip_mirror_help: 'PIP index URL',
+                hf_mirror_label: 'HuggingFace Mirror:',
+                hf_mirror_help: 'HuggingFace endpoint URL',
+                lowvram_label: 'Low VRAM (< 6GB)',
+                fp16_vae_label: 'FP16 VAE (saves VRAM)',
+                dont_upcast_label: 'Don\'t upcast attention',
+                disable_smart_label: 'Disable smart memory',
+                fast_mode_label: 'Fast mode (RTX 40xx+)',
+                pytorch_attention_label: 'Disable xFormers',
+                cpu_mode_label: 'CPU mode (very slow!)',
+                directml_label: 'DirectML (AMD/Intel Arc)',
+                disable_auto_label: 'Don\'t open browser',
+                port_label: 'Server Port:',
+                port_help: 'Default 8188',
+                listen_label: 'Listen Address:',
+                listen_help: '127.0.0.1 = localhost, 0.0.0.0 = all',
+                extra_args_label: 'Extra Arguments:',
+                extra_args_placeholder: '--argument1 value1 --argument2',
+                extra_args_help: 'Custom CLI flags separated by spaces',
+                apply_button: 'Apply Settings',
+                install_button: 'Install Dependencies',
+                start_button: 'Start ComfyUI',
+                stop_button: 'Stop',
+                restart_button: 'Restart',
+                config_saved: 'Configuration saved!',
+                config_loaded: 'Configuration loaded',
+                path_valid: 'Valid ComfyUI installation found!',
+                path_invalid: 'Invalid path - python_embeded/python.exe or ComfyUI/main.py not found',
+                path_required: 'Please select ComfyUI installation path first',
+                path_first_run_info: 'Make sure you have run ComfyUI at least once using the original .bat file before using this launcher!',
+                comfyui_starting: 'Starting ComfyUI...',
+                comfyui_started: 'ComfyUI is running!',
+                comfyui_stopping: 'Stopping ComfyUI...',
+                comfyui_stopped: 'ComfyUI stopped',
+                comfyui_restarting: 'Restarting ComfyUI...'
+            },
+            pl: {
+                title: 'ComfyUI Launcher Pro',
+                subtitle: 'Zaawansowany launcher dla ComfyUI',
+                path_tab: 'Ścieżka',
+                env_tab: 'Środowisko',
+                performance_tab: 'Wydajność',
+                modes_tab: 'Tryby',
+                network_tab: 'Sieć',
+                advanced_tab: 'Zaawansowane',
+                comfyui_path_label: 'Ścieżka instalacji ComfyUI:',
+                path_placeholder: 'C:\\Users\\Admin\\Desktop\\ComfyUI_windows_portable',
+                path_help: 'Wybierz folder zawierający katalogi python_embeded i ComfyUI',
+                browse_button: 'Przeglądaj',
+                http_proxy_label: 'HTTP Proxy:',
+                http_proxy_help: 'Opcjonalny proxy HTTP',
+                https_proxy_label: 'HTTPS Proxy:',
+                https_proxy_help: 'Opcjonalny proxy HTTPS',
+                hf_token_label: 'Token HuggingFace:',
+                hf_token_help: 'Opcjonalny token dla prywatnych modeli',
+                pip_mirror_label: 'Mirror PIP:',
+                pip_mirror_help: 'URL mirrora dla pip',
+                hf_mirror_label: 'Mirror HuggingFace:',
+                hf_mirror_help: 'URL mirrora HuggingFace',
+                lowvram_label: 'Low VRAM (< 6GB)',
+                fp16_vae_label: 'FP16 VAE (oszczędność VRAM)',
+                dont_upcast_label: 'Nie podwyższaj precyzji',
+                disable_smart_label: 'Wyłącz smart memory',
+                fast_mode_label: 'Tryb szybki (RTX 40xx+)',
+                pytorch_attention_label: 'Wyłącz xFormers',
+                cpu_mode_label: 'Tryb CPU (bardzo wolno!)',
+                directml_label: 'DirectML (AMD/Intel Arc)',
+                disable_auto_label: 'Nie otwieraj przeglądarki',
+                port_label: 'Port serwera:',
+                port_help: 'Domyślnie 8188',
+                listen_label: 'Adres nasłuchiwania:',
+                listen_help: '127.0.0.1 = localhost, 0.0.0.0 = wszystkie',
+                extra_args_label: 'Dodatkowe argumenty:',
+                extra_args_placeholder: '--argument1 value1 --argument2',
+                extra_args_help: 'Własne flagi CLI oddzielone spacjami',
+                apply_button: 'Zastosuj ustawienia',
+                install_button: 'Instaluj zależności',
+                start_button: 'Uruchom ComfyUI',
+                stop_button: 'Stop',
+                restart_button: 'Restart',
+                config_saved: 'Konfiguracja zapisana!',
+                config_loaded: 'Konfiguracja załadowana',
+                path_valid: 'Znaleziono prawidłową instalację ComfyUI!',
+                path_invalid: 'Nieprawidłowa ścieżka - nie znaleziono python_embeded/python.exe lub ComfyUI/main.py',
+                path_required: 'Proszę najpierw wybrać ścieżkę instalacji ComfyUI',
+                path_first_run_info: 'Upewnij się, że uruchomiłeś ComfyUI przynajmniej raz za pomocą oryginalnego pliku .bat!',
+                comfyui_starting: 'Uruchamianie ComfyUI...',
+                comfyui_started: 'ComfyUI działa!',
+                comfyui_stopping: 'Zatrzymywanie ComfyUI...',
+                comfyui_stopped: 'ComfyUI zatrzymany',
+                comfyui_restarting: 'Restart ComfyUI...'
+            }
+        };
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                translations = defaultTranslations;
+                await loadConfig();
+                setupEventListeners();
+                setupTabs();
+                updateUI();
+                
+                // Check ComfyUI running state
+                await checkComfyUIState();
+                
+                // Validate path on startup if exists
+                if (currentConfig.comfyui_path) {
+                    await validatePath();
+                }
+                
+                console.log('Application initialized successfully');
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showStatus('Application initialization error', 'error');
+            }
+        });
+
+        // NEW - Check if ComfyUI is running
+        async function checkComfyUIState() {
+            try {
+                if (window.electronAPI && window.electronAPI.isComfyUIRunning) {
+                    const result = await window.electronAPI.isComfyUIRunning();
+                    if (result.running) {
+                        setComfyUIRunning(true);
+                    } else {
+                        setComfyUIRunning(false);
+                    }
+                }
+            } catch (error) {
+                console.error('State check error:', error);
+                setComfyUIRunning(false);
+            }
+        }
+
+        // NEW - Set ComfyUI running state and update buttons
+        function setComfyUIRunning(running) {
+            isComfyUIRunning = running;
+            updateControlButtons();
+        }
+
+        // NEW - Update control buttons based on ComfyUI state
+        function updateControlButtons() {
+            const controlButtons = document.getElementById('controlButtons');
+            const currentTranslations = translations[currentLang];
+            
+            if (isComfyUIRunning) {
+                // ComfyUI is running - show Stop and Restart buttons
+                controlButtons.innerHTML = `
+                    <button class="btn-danger" id="stopBtn">
+                        <span class="status-indicator running"></span>${currentTranslations.stop_button}
+                    </button>
+                    <button class="btn-info" id="restartBtn">
+                        ${currentTranslations.restart_button}
+                    </button>
+                `;
+                controlButtons.className = 'control-buttons running';
+                
+                // Add event listeners for new buttons
+                document.getElementById('stopBtn').addEventListener('click', stopComfyUI);
+                document.getElementById('restartBtn').addEventListener('click', restartComfyUI);
+            } else {
+                // ComfyUI is not running - show Start button
+                controlButtons.innerHTML = `
+                    <button class="btn-success" id="startBtn">
+                        <span class="status-indicator stopped"></span>${currentTranslations.start_button}
+                    </button>
+                `;
+                controlButtons.className = 'control-buttons';
+                
+                // Add event listener for start button
+                document.getElementById('startBtn').addEventListener('click', startComfyUI);
+            }
+        }
+
+        // Load configuration
+        async function loadConfig() {
+            try {
+                if (window.electronAPI && window.electronAPI.loadConfig) {
+                    currentConfig = await window.electronAPI.loadConfig();
+                    updateFormFromConfig();
+                    showStatus(translations[currentLang].config_loaded, 'success');
+                } else {
+                    console.warn('electronAPI not available - using default config');
+                    currentConfig = getDefaultConfig();
+                    updateFormFromConfig();
+                }
+            } catch (error) {
+                console.error('Config loading error:', error);
+                showStatus('Config loading error', 'error');
+                currentConfig = getDefaultConfig();
+                updateFormFromConfig();
+            }
+        }
+
+        // Default configuration
+        function getDefaultConfig() {
+            return {
+                language: 'en', // Changed to English default
+                comfyui_path: '', // New field for ComfyUI path
+                http_proxy: '',
+                https_proxy: '',
+                hf_token: '',
+                pip_index_url: '',
+                hf_endpoint: '',
+                lowvram: false,
+                fp16_vae: false,
+                dont_upcast_attention: false,
+                disable_smart_memory: false,
+                fast_mode: false,
+                use_pytorch_cross_attention: false,
+                cpu_mode: false,
+                directml: false,
+                disable_auto_launch: false,
+                port: '8188',
+                listen: '127.0.0.1',
+                extra_args: ''
+            };
+        }
+
+        // Apply settings
+        async function applySettings() {
+            try {
+                const config = getConfigFromForm();
+                
+                if (window.electronAPI && window.electronAPI.saveConfig) {
+                    const result = await window.electronAPI.saveConfig(config);
+                    
+                    if (result.success) {
+                        currentConfig = config;
+                        showStatus(translations[currentLang].config_saved, 'success');
+                    } else {
+                        showStatus('Save error: ' + result.message, 'error');
+                    }
+                } else {
+                    console.warn('electronAPI not available - cannot save');
+                    showStatus('Error: electronAPI not available', 'error');
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                showStatus('Settings save error', 'error');
+            }
+        }
+
+        // Start ComfyUI
+        async function startComfyUI() {
+            try {
+                if (!currentConfig.comfyui_path) {
+                    showStatus(translations[currentLang].path_required, 'error');
+                    return;
+                }
+
+                const currentTranslations = translations[currentLang];
+                showStatus(currentTranslations.comfyui_starting, 'success');
+                
+                if (window.electronAPI && window.electronAPI.startComfyUI) {
+                    const result = await window.electronAPI.startComfyUI(currentConfig);
+                    
+                    if (result.success) {
+                        showStatus(`ComfyUI started! PID: ${result.pid}`, 'success');
+                        showOutput();
+                        setComfyUIRunning(true);
+                    } else {
+                        showStatus('ComfyUI start error: ' + result.error, 'error');
+                        setComfyUIRunning(false);
+                    }
+                } else {
+                    showStatus('Error: electronAPI not available', 'error');
+                }
+            } catch (error) {
+                console.error('Start error:', error);
+                showStatus('ComfyUI start error', 'error');
+                setComfyUIRunning(false);
+            }
+        }
+
+        // NEW - Stop ComfyUI
+        async function stopComfyUI() {
+            try {
+                const currentTranslations = translations[currentLang];
+                showStatus(currentTranslations.comfyui_stopping, 'success');
+                
+                if (window.electronAPI && window.electronAPI.stopComfyUI) {
+                    const result = await window.electronAPI.stopComfyUI();
+                    
+                    if (result.success) {
+                        showStatus(currentTranslations.comfyui_stopped, 'success');
+                        setComfyUIRunning(false);
+                    } else {
+                        showStatus('Stop error: ' + result.message, 'error');
+                    }
+                } else {
+                    showStatus('Error: electronAPI not available', 'error');
+                }
+            } catch (error) {
+                console.error('Stop error:', error);
+                showStatus('ComfyUI stop error', 'error');
+            }
+        }
+
+        // NEW - Restart ComfyUI
+        async function restartComfyUI() {
+            try {
+                const currentTranslations = translations[currentLang];
+                showStatus(currentTranslations.comfyui_restarting, 'success');
+                
+                // First stop ComfyUI
+                if (window.electronAPI && window.electronAPI.stopComfyUI) {
+                    const stopResult = await window.electronAPI.stopComfyUI();
+                    
+                    if (stopResult.success) {
+                        // Wait a bit for clean shutdown
+                        setTimeout(async () => {
+                            // Then start it again
+                            await startComfyUI();
+                        }, 2000);
+                    } else {
+                        showStatus('Restart error: ' + stopResult.message, 'error');
+                    }
+                } else {
+                    showStatus('Error: electronAPI not available', 'error');
+                }
+            } catch (error) {
+                console.error('Restart error:', error);
+                showStatus('ComfyUI restart error', 'error');
+            }
+        }
+
+        // Install dependencies
+        async function installDependencies() {
+            try {
+                if (!currentConfig.comfyui_path) {
+                    showStatus(translations[currentLang].path_required, 'error');
+                    return;
+                }
+
+                showStatus('Installing dependencies...', 'success');
+                showOutput();
+                
+                if (window.electronAPI && window.electronAPI.installDependencies) {
+                    const result = await window.electronAPI.installDependencies(currentConfig);
+                    
+                    if (result.success) {
+                        showStatus('Dependencies installed!', 'success');
+                    } else {
+                        showStatus('Installation error: ' + result.error, 'error');
+                    }
+                } else {
+                    showStatus('Error: electronAPI not available', 'error');
+                }
+            } catch (error) {
+                console.error('Installation error:', error);
+                showStatus('Dependencies installation error', 'error');
+            }
+        }
+
+        // Browse for ComfyUI path
+        async function browsePath() {
+            try {
+                if (window.electronAPI && window.electronAPI.selectDirectory) {
+                    const result = await window.electronAPI.selectDirectory();
+                    
+                    if (result.success && result.path) {
+                        document.getElementById('comfyuiPath').value = result.path;
+                        currentConfig.comfyui_path = result.path;
+                        await validatePath();
+                    }
+                } else {
+                    showStatus('Error: electronAPI not available', 'error');
+                }
+            } catch (error) {
+                console.error('Browse error:', error);
+                showStatus('Path selection error', 'error');
+            }
+        }
+
+        // Validate ComfyUI path
+        async function validatePath() {
+            const path = document.getElementById('comfyuiPath').value;
+            const statusEl = document.getElementById('pathStatus');
+            
+            if (!path) {
+                statusEl.style.display = 'none';
+                return false;
+            }
+
+            try {
+                if (window.electronAPI && window.electronAPI.validatePath) {
+                    const result = await window.electronAPI.validatePath(path);
+                    
+                    statusEl.style.display = 'block';
+                    if (result.valid) {
+                        statusEl.className = 'path-status valid';
+                        statusEl.textContent = translations[currentLang].path_valid;
+                        return true;
+                    } else {
+                        statusEl.className = 'path-status invalid';
+                        statusEl.textContent = translations[currentLang].path_invalid + '\\n\\n' + translations[currentLang].path_first_run_info;
+                        return false;
+                    }
+                } else {
+                    statusEl.style.display = 'none';
+                    return false;
+                }
+            } catch (error) {
+                console.error('Path validation error:', error);
+                statusEl.style.display = 'block';
+                statusEl.className = 'path-status invalid';
+                statusEl.textContent = 'Path validation error';
+                return false;
+            }
+        }
+
+        // Get configuration from form
+        function getConfigFromForm() {
+            return {
+                language: document.getElementById('languageSelect').value,
+                comfyui_path: document.getElementById('comfyuiPath').value,
+                http_proxy: document.getElementById('httpProxy').value,
+                https_proxy: document.getElementById('httpsProxy').value,
+                hf_token: document.getElementById('hfToken').value,
+                pip_index_url: document.getElementById('pipIndex').value,
+                hf_endpoint: document.getElementById('hfEndpoint').value,
+                lowvram: document.getElementById('lowvram').checked,
+                fp16_vae: document.getElementById('fp16Vae').checked,
+                dont_upcast_attention: document.getElementById('dontUpcast').checked,
+                disable_smart_memory: document.getElementById('disableSmart').checked,
+                fast_mode: document.getElementById('fastMode').checked,
+                use_pytorch_cross_attention: document.getElementById('pytorchAttention').checked,
+                cpu_mode: document.getElementById('cpuMode').checked,
+                directml: document.getElementById('directml').checked,
+                disable_auto_launch: document.getElementById('disableAuto').checked,
+                port: document.getElementById('port').value,
+                listen: document.getElementById('listen').value,
+                extra_args: document.getElementById('extraArgs').value
+            };
+        }
+
+        // Update form from configuration
+        function updateFormFromConfig() {
+            document.getElementById('languageSelect').value = currentConfig.language || 'en';
+            document.getElementById('comfyuiPath').value = currentConfig.comfyui_path || '';
+            document.getElementById('httpProxy').value = currentConfig.http_proxy || '';
+            document.getElementById('httpsProxy').value = currentConfig.https_proxy || '';
+            document.getElementById('hfToken').value = currentConfig.hf_token || '';
+            document.getElementById('pipIndex').value = currentConfig.pip_index_url || '';
+            document.getElementById('hfEndpoint').value = currentConfig.hf_endpoint || '';
+            document.getElementById('lowvram').checked = currentConfig.lowvram || false;
+            document.getElementById('fp16Vae').checked = currentConfig.fp16_vae || false;
+            document.getElementById('dontUpcast').checked = currentConfig.dont_upcast_attention || false;
+            document.getElementById('disableSmart').checked = currentConfig.disable_smart_memory || false;
+            document.getElementById('fastMode').checked = currentConfig.fast_mode || false;
+            document.getElementById('pytorchAttention').checked = currentConfig.use_pytorch_cross_attention || false;
+            document.getElementById('cpuMode').checked = currentConfig.cpu_mode || false;
+            document.getElementById('directml').checked = currentConfig.directml || false;
+            document.getElementById('disableAuto').checked = currentConfig.disable_auto_launch || false;
+            document.getElementById('port').value = currentConfig.port || '8188';
+            document.getElementById('listen').value = currentConfig.listen || '127.0.0.1';
+            document.getElementById('extraArgs').value = currentConfig.extra_args || '';
+            
+            // Update current language
+            currentLang = currentConfig.language || 'en';
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Apply button
+            document.getElementById('applyBtn').addEventListener('click', applySettings);
+            
+            // Install button
+            document.getElementById('installBtn').addEventListener('click', installDependencies);
+            
+            // Browse button
+            document.getElementById('browsePath').addEventListener('click', browsePath);
+            
+            // Language change
+            document.getElementById('languageSelect').addEventListener('change', async (e) => {
+                currentLang = e.target.value;
+                updateUI();
+            });
+
+            // Path validation on input
+            document.getElementById('comfyuiPath').addEventListener('input', async (e) => {
+                currentConfig.comfyui_path = e.target.value;
+                await validatePath();
+            });
+
+            // Safe event listener setup
+            if (window.electronAPI) {
+                // ComfyUI output
+                if (window.electronAPI.onComfyUIOutput) {
+                    window.electronAPI.onComfyUIOutput((data) => {
+                        appendOutput(data);
+                    });
+                }
+
+                // ComfyUI exit
+                if (window.electronAPI.onComfyUIExit) {
+                    window.electronAPI.onComfyUIExit((code) => {
+                        showStatus(`ComfyUI finished with code: ${code}`, code === 0 ? 'success' : 'error');
+                        setComfyUIRunning(false);
+                    });
+                }
+
+                // Install output
+                if (window.electronAPI.onInstallOutput) {
+                    window.electronAPI.onInstallOutput((data) => {
+                        appendOutput(data);
+                    });
+                }
+
+                // NEW - Process state events
+                if (window.electronAPI.onComfyUIStarted) {
+                    window.electronAPI.onComfyUIStarted(() => {
+                        setComfyUIRunning(true);
+                        showStatus(translations[currentLang].comfyui_started, 'success');
+                    });
+                }
+
+                if (window.electronAPI.onComfyUIStopped) {
+                    window.electronAPI.onComfyUIStopped(() => {
+                        setComfyUIRunning(false);
+                        showStatus(translations[currentLang].comfyui_stopped, 'success');
+                    });
+                }
+            }
+        }
+
+        // Setup tabs
+        function setupTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.dataset.tab;
+                    
+                    // Remove active from all
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active to selected
+                    button.classList.add('active');
+                    const targetElement = document.getElementById(`tab-${targetTab}`);
+                    if (targetElement) {
+                        targetElement.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // Show status
+        function showStatus(message, type = 'success') {
+            const statusElement = document.getElementById('status');
+            if (statusElement) {
+                statusElement.textContent = message;
+                statusElement.className = `status ${type}`;
+                statusElement.style.display = 'block';
+                
+                // Hide after 5 seconds
+                setTimeout(() => {
+                    statusElement.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Also log to console
+            console.log(`Status [${type}]: ${message}`);
+        }
+
+        // Show/hide output
+        function showOutput() {
+            const outputElement = document.getElementById('output');
+            if (outputElement) {
+                outputElement.style.display = 'block';
+                outputElement.textContent = '';
+            }
+        }
+
+        // Append to output
+        function appendOutput(text) {
+            const outputElement = document.getElementById('output');
+            if (outputElement) {
+                outputElement.textContent += text;
+                outputElement.scrollTop = outputElement.scrollHeight;
+            }
+        }
+
+        // Update UI with translations - FIXED FUNCTION
+        function updateUI() {
+            const currentTranslations = translations[currentLang];
+            
+            // Update all elements with data-text attributes
+            document.querySelectorAll('[data-text]').forEach(element => {
+                const key = element.getAttribute('data-text');
+                if (currentTranslations[key]) {
+                    if (element.tagName === 'INPUT' && element.type === 'text') {
+                        element.placeholder = currentTranslations[key];
+                    } else if (element.tagName === 'TEXTAREA') {
+                        element.placeholder = currentTranslations[key];
+                    } else {
+                        element.textContent = currentTranslations[key];
+                    }
+                }
+            });
+
+            // Update specific elements by ID
+            const titleElement = document.getElementById('title');
+            if (titleElement && currentTranslations.title) {
+                titleElement.textContent = currentTranslations.title;
+            }
+            
+            const subtitleElement = document.getElementById('subtitle');
+            if (subtitleElement && currentTranslations.subtitle) {
+                subtitleElement.textContent = currentTranslations.subtitle;
+            }
+
+            // Update language selector
+            document.getElementById('languageSelect').value = currentLang;
+            
+            // Update control buttons with new language
+            updateControlButtons();
+            
+            // Re-validate path with new language
+            if (currentConfig.comfyui_path) {
+                validatePath();
+            }
+        }
+    </script>
+</body>
+</html>
