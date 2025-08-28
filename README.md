@@ -21,6 +21,12 @@
   - simple GUI for configuration,
   - buttons to run, stop, and install dependencies,
   - display of logs and error/info dialogs.
+- **Browser integration (release 4.1.0)**
+  - Auto-Open Browser
+  - Custom Window Size
+  - Remember Window Position
+  - Always on Top
+  - Manual Controls
 
 ## 📥 Download
 
