@@ -1,4 +1,4 @@
-// preload.js - Bezpieczny mostek między main a renderer
+// preload.js - Bezpieczny mostek między main a renderer z obsługą przeglądarki
 const { contextBridge, ipcRenderer } = require('electron');
 
 // Expose API do renderer procesu
@@ -13,9 +13,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   
   // ComfyUI
   startComfyUI: (config) => ipcRenderer.invoke('start-comfyui', config),
-  stopComfyUI: () => ipcRenderer.invoke('stop-comfyui'), // NEW
-  isComfyUIRunning: () => ipcRenderer.invoke('is-comfyui-running'), // NEW
+  stopComfyUI: () => ipcRenderer.invoke('stop-comfyui'),
+  isComfyUIRunning: () => ipcRenderer.invoke('is-comfyui-running'),
   installDependencies: (config) => ipcRenderer.invoke('install-dependencies', config),
+  
+  // NEW - Browser controls
+  openComfyUIBrowser: (config) => ipcRenderer.invoke('open-comfyui-browser', config),
+  closeComfyUIBrowser: () => ipcRenderer.invoke('close-comfyui-browser'),
+  isBrowserOpen: () => ipcRenderer.invoke('is-browser-open'),
   
   // Dialogi
   showError: (title, message) => ipcRenderer.invoke('show-error', title, message),
@@ -38,13 +43,18 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('path-selected', (event, path) => callback(path));
   },
 
-  // NEW - Process state events
+  // Process state events
   onComfyUIStarted: (callback) => {
     ipcRenderer.on('comfyui-started', () => callback());
   },
 
   onComfyUIStopped: (callback) => {
     ipcRenderer.on('comfyui-stopped', () => callback());
+  },
+
+  // NEW - Browser events
+  onComfyUIBrowserClosed: (callback) => {
+    ipcRenderer.on('comfyui-browser-closed', () => callback());
   },
   
   // Cleanup listenery
