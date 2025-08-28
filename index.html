@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -113,7 +113,7 @@
             color: #333;
         }
 
-        input[type="text"], input[type="password"], select, textarea {
+        input[type="text"], input[type="password"], input[type="number"], select, textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
@@ -122,7 +122,7 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="text"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
+        input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -248,6 +248,17 @@
             transform: translateY(-2px);
         }
 
+        /* NEW - Browser button style */
+        .btn-browser {
+            background: linear-gradient(135deg, #20c997, #17a2b8);
+            color: white;
+        }
+
+        .btn-browser:hover {
+            background: linear-gradient(135deg, #1ea67a, #138496);
+            transform: translateY(-2px);
+        }
+
         .status {
             margin-top: 20px;
             padding: 15px;
@@ -331,7 +342,6 @@
             border: 1px solid #f5c6cb;
         }
 
-        /* NEW - Dynamic button styles */
         .control-buttons {
             display: flex;
             gap: 10px;
@@ -364,7 +374,6 @@
             animation: pulse 1.5s infinite;
         }
 
-        /* Status indicator */
         .status-indicator {
             display: inline-block;
             width: 10px;
@@ -380,6 +389,23 @@
 
         .status-indicator.stopped {
             background: #dc3545;
+        }
+
+        /* NEW - Browser section styles */
+        .browser-controls {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .browser-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
         }
     </style>
 </head>
@@ -403,6 +429,7 @@
             <button class="tab-button" data-tab="performance" data-text="performance_tab">Performance</button>
             <button class="tab-button" data-tab="modes" data-text="modes_tab">Modes</button>
             <button class="tab-button" data-tab="network" data-text="network_tab">Network</button>
+            <button class="tab-button" data-tab="browser" data-text="browser_tab">Browser</button>
             <button class="tab-button" data-tab="advanced" data-text="advanced_tab">Advanced</button>
         </div>
 
@@ -528,6 +555,65 @@
             </div>
         </div>
 
+        <!-- NEW - Tab Browser -->
+        <div class="tab-content" id="tab-browser">
+            <div class="browser-section-title" data-text="browser_settings_title">Browser Settings</div>
+            
+            <!-- Auto-open setting -->
+            <div class="form-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="browserAutoOpen">
+                    <label for="browserAutoOpen" data-text="browser_auto_open_label">Auto-open browser when ComfyUI starts</label>
+                </div>
+                <div class="help-text" data-text="browser_auto_open_help">Automatically opens ComfyUI interface in dedicated window</div>
+            </div>
+
+            <!-- Window size settings -->
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="browserWidth" data-text="browser_width_label">Window Width:</label>
+                        <input type="number" id="browserWidth" value="1400" min="800" max="3000">
+                        <div class="help-text" data-text="browser_width_help">Browser window width in pixels</div>
+                    </div>
+                    <div class="form-col">
+                        <label for="browserHeight" data-text="browser_height_label">Window Height:</label>
+                        <input type="number" id="browserHeight" value="900" min="600" max="2000">
+                        <div class="help-text" data-text="browser_height_help">Browser window height in pixels</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional browser options -->
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="browserRememberPosition">
+                        <label for="browserRememberPosition" data-text="browser_remember_pos_label">Remember window position</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="browserAlwaysOnTop">
+                        <label for="browserAlwaysOnTop" data-text="browser_always_top_label">Always on top</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manual browser controls -->
+            <div class="browser-controls">
+                <div class="browser-section-title" data-text="browser_controls_title">Browser Controls</div>
+                <div class="help-text" data-text="browser_controls_help" style="margin-bottom: 15px;">Manual controls for ComfyUI browser window (requires running ComfyUI)</div>
+                
+                <div class="button-group">
+                    <button class="btn-browser" id="openBrowserBtn" data-text="open_browser_button">
+                        🌐 Open Browser
+                    </button>
+                    <button class="btn-secondary" id="closeBrowserBtn" data-text="close_browser_button">
+                        ✖ Close Browser
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Tab Advanced -->
         <div class="tab-content" id="tab-advanced">
             <div class="form-group">
@@ -543,7 +629,7 @@
                 <button class="btn-primary" id="applyBtn" data-text="apply_button">Apply Settings</button>
                 <button class="btn-secondary" id="installBtn" data-text="install_button">Install Dependencies</button>
                 
-                <!-- NEW - Dynamic control buttons for ComfyUI -->
+                <!-- Dynamic control buttons for ComfyUI -->
                 <div id="controlButtons" class="control-buttons">
                     <!-- Default state: Start button -->
                     <button class="btn-success" id="startBtn" data-text="start_button">
@@ -560,11 +646,12 @@
     <script>
         // Global variables
         let currentConfig = {};
-        let currentLang = 'en'; // Changed to English default
+        let currentLang = 'en';
         let translations = {};
-        let isComfyUIRunning = false; // NEW - Track ComfyUI state
+        let isComfyUIRunning = false;
+        let isBrowserOpen = false; // NEW - Track browser state
 
-        // Translations object
+        // Translations object with NEW browser translations
         const defaultTranslations = {
             en: {
                 title: 'ComfyUI Launcher Pro',
@@ -574,6 +661,7 @@
                 performance_tab: 'Performance',
                 modes_tab: 'Modes',
                 network_tab: 'Network',
+                browser_tab: 'Browser', // NEW
                 advanced_tab: 'Advanced',
                 comfyui_path_label: 'ComfyUI Installation Path:',
                 path_placeholder: 'C:\\Users\\Admin\\Desktop\\ComfyUI_windows_portable',
@@ -610,6 +698,20 @@
                 start_button: 'Start ComfyUI',
                 stop_button: 'Stop',
                 restart_button: 'Restart',
+                // NEW - Browser translations
+                browser_settings_title: 'Browser Settings',
+                browser_auto_open_label: 'Auto-open browser when ComfyUI starts',
+                browser_auto_open_help: 'Automatically opens ComfyUI interface in dedicated window',
+                browser_width_label: 'Window Width:',
+                browser_width_help: 'Browser window width in pixels',
+                browser_height_label: 'Window Height:',
+                browser_height_help: 'Browser window height in pixels',
+                browser_remember_pos_label: 'Remember window position',
+                browser_always_top_label: 'Always on top',
+                browser_controls_title: 'Browser Controls',
+                browser_controls_help: 'Manual controls for ComfyUI browser window (requires running ComfyUI)',
+                open_browser_button: '🌐 Open Browser',
+                close_browser_button: '✖ Close Browser',
                 config_saved: 'Configuration saved!',
                 config_loaded: 'Configuration loaded',
                 path_valid: 'Valid ComfyUI installation found!',
@@ -620,7 +722,11 @@
                 comfyui_started: 'ComfyUI is running!',
                 comfyui_stopping: 'Stopping ComfyUI...',
                 comfyui_stopped: 'ComfyUI stopped',
-                comfyui_restarting: 'Restarting ComfyUI...'
+                comfyui_restarting: 'Restarting ComfyUI...',
+                browser_opened: 'ComfyUI browser opened!',
+                browser_closed: 'ComfyUI browser closed',
+                browser_already_open: 'Browser is already open',
+                browser_not_running: 'ComfyUI must be running to open browser'
             },
             pl: {
                 title: 'ComfyUI Launcher Pro',
@@ -630,6 +736,7 @@
                 performance_tab: 'Wydajność',
                 modes_tab: 'Tryby',
                 network_tab: 'Sieć',
+                browser_tab: 'Przeglądarka', // NEW
                 advanced_tab: 'Zaawansowane',
                 comfyui_path_label: 'Ścieżka instalacji ComfyUI:',
                 path_placeholder: 'C:\\Users\\Admin\\Desktop\\ComfyUI_windows_portable',
@@ -666,6 +773,20 @@
                 start_button: 'Uruchom ComfyUI',
                 stop_button: 'Stop',
                 restart_button: 'Restart',
+                // NEW - Browser translations PL
+                browser_settings_title: 'Ustawienia przeglądarki',
+                browser_auto_open_label: 'Auto-otwieranie przeglądarki przy starcie ComfyUI',
+                browser_auto_open_help: 'Automatycznie otwiera interfejs ComfyUI w dedykowanym oknie',
+                browser_width_label: 'Szerokość okna:',
+                browser_width_help: 'Szerokość okna przeglądarki w pikselach',
+                browser_height_label: 'Wysokość okna:',
+                browser_height_help: 'Wysokość okna przeglądarki w pikselach',
+                browser_remember_pos_label: 'Zapamiętaj pozycję okna',
+                browser_always_top_label: 'Zawsze na wierzchu',
+                browser_controls_title: 'Kontrola przeglądarki',
+                browser_controls_help: 'Ręczne sterowanie oknem przeglądarki ComfyUI (wymaga uruchomionego ComfyUI)',
+                open_browser_button: '🌐 Otwórz przeglądarkę',
+                close_browser_button: '✖ Zamknij przeglądarkę',
                 config_saved: 'Konfiguracja zapisana!',
                 config_loaded: 'Konfiguracja załadowana',
                 path_valid: 'Znaleziono prawidłową instalację ComfyUI!',
@@ -676,7 +797,11 @@
                 comfyui_started: 'ComfyUI działa!',
                 comfyui_stopping: 'Zatrzymywanie ComfyUI...',
                 comfyui_stopped: 'ComfyUI zatrzymany',
-                comfyui_restarting: 'Restart ComfyUI...'
+                comfyui_restarting: 'Restart ComfyUI...',
+                browser_opened: 'Przeglądarka ComfyUI otwarta!',
+                browser_closed: 'Przeglądarka ComfyUI zamknięta',
+                browser_already_open: 'Przeglądarka jest już otwarta',
+                browser_not_running: 'ComfyUI musi być uruchomiony aby otworzyć przeglądarkę'
             }
         };
 
@@ -689,8 +814,9 @@
                 setupTabs();
                 updateUI();
                 
-                // Check ComfyUI running state
+                // Check ComfyUI and browser state
                 await checkComfyUIState();
+                await checkBrowserState(); // NEW
                 
                 // Validate path on startup if exists
                 if (currentConfig.comfyui_path) {
@@ -704,30 +830,55 @@
             }
         });
 
-        // NEW - Check if ComfyUI is running
+        // Check if ComfyUI is running
         async function checkComfyUIState() {
             try {
                 if (window.electronAPI && window.electronAPI.isComfyUIRunning) {
                     const result = await window.electronAPI.isComfyUIRunning();
                     if (result.running) {
                         setComfyUIRunning(true);
+                        if (result.browser_open) {
+                            setBrowserOpen(true);
+                        }
                     } else {
                         setComfyUIRunning(false);
+                        setBrowserOpen(false);
                     }
                 }
             } catch (error) {
                 console.error('State check error:', error);
                 setComfyUIRunning(false);
+                setBrowserOpen(false);
             }
         }
 
-        // NEW - Set ComfyUI running state and update buttons
+        // NEW - Check browser state
+        async function checkBrowserState() {
+            try {
+                if (window.electronAPI && window.electronAPI.isBrowserOpen) {
+                    const result = await window.electronAPI.isBrowserOpen();
+                    setBrowserOpen(result.open);
+                }
+            } catch (error) {
+                console.error('Browser state check error:', error);
+                setBrowserOpen(false);
+            }
+        }
+
+        // Set ComfyUI running state and update buttons
         function setComfyUIRunning(running) {
             isComfyUIRunning = running;
             updateControlButtons();
+            updateBrowserButtons(); // NEW
         }
 
-        // NEW - Update control buttons based on ComfyUI state
+        // NEW - Set browser state and update buttons
+        function setBrowserOpen(open) {
+            isBrowserOpen = open;
+            updateBrowserButtons();
+        }
+
+        // Update control buttons based on ComfyUI state
         function updateControlButtons() {
             const controlButtons = document.getElementById('controlButtons');
             const currentTranslations = translations[currentLang];
@@ -761,6 +912,35 @@
             }
         }
 
+        // NEW - Update browser control buttons
+        function updateBrowserButtons() {
+            const openBtn = document.getElementById('openBrowserBtn');
+            const closeBtn = document.getElementById('closeBrowserBtn');
+            
+            if (openBtn && closeBtn) {
+                // Enable/disable based on ComfyUI state
+                openBtn.disabled = !isComfyUIRunning;
+                closeBtn.disabled = !isBrowserOpen;
+                
+                // Update button styles
+                if (!isComfyUIRunning) {
+                    openBtn.style.opacity = '0.5';
+                    openBtn.style.cursor = 'not-allowed';
+                } else {
+                    openBtn.style.opacity = '1';
+                    openBtn.style.cursor = 'pointer';
+                }
+                
+                if (!isBrowserOpen) {
+                    closeBtn.style.opacity = '0.5';
+                    closeBtn.style.cursor = 'not-allowed';
+                } else {
+                    closeBtn.style.opacity = '1';
+                    closeBtn.style.cursor = 'pointer';
+                }
+            }
+        }
+
         // Load configuration
         async function loadConfig() {
             try {
@@ -781,11 +961,11 @@
             }
         }
 
-        // Default configuration
+        // Default configuration with browser settings
         function getDefaultConfig() {
             return {
-                language: 'en', // Changed to English default
-                comfyui_path: '', // New field for ComfyUI path
+                language: 'en',
+                comfyui_path: '',
                 http_proxy: '',
                 https_proxy: '',
                 hf_token: '',
@@ -802,7 +982,15 @@
                 disable_auto_launch: false,
                 port: '8188',
                 listen: '127.0.0.1',
-                extra_args: ''
+                extra_args: '',
+                // NEW - Browser settings
+                browser_settings: {
+                    auto_open: true,
+                    window_width: 1400,
+                    window_height: 900,
+                    remember_position: true,
+                    always_on_top: false
+                }
             };
         }
 
@@ -862,7 +1050,7 @@
             }
         }
 
-        // NEW - Stop ComfyUI
+        // Stop ComfyUI
         async function stopComfyUI() {
             try {
                 const currentTranslations = translations[currentLang];
@@ -874,6 +1062,7 @@
                     if (result.success) {
                         showStatus(currentTranslations.comfyui_stopped, 'success');
                         setComfyUIRunning(false);
+                        setBrowserOpen(false); // Browser closes with ComfyUI
                     } else {
                         showStatus('Stop error: ' + result.message, 'error');
                     }
@@ -886,7 +1075,7 @@
             }
         }
 
-        // NEW - Restart ComfyUI
+        // Restart ComfyUI
         async function restartComfyUI() {
             try {
                 const currentTranslations = translations[currentLang];
@@ -911,6 +1100,53 @@
             } catch (error) {
                 console.error('Restart error:', error);
                 showStatus('ComfyUI restart error', 'error');
+            }
+        }
+
+        // NEW - Open browser manually
+        async function openBrowser() {
+            try {
+                if (!isComfyUIRunning) {
+                    showStatus(translations[currentLang].browser_not_running, 'error');
+                    return;
+                }
+
+                if (window.electronAPI && window.electronAPI.openComfyUIBrowser) {
+                    const result = await window.electronAPI.openComfyUIBrowser(currentConfig);
+                    
+                    if (result.success) {
+                        showStatus(translations[currentLang].browser_opened, 'success');
+                        setBrowserOpen(true);
+                    } else {
+                        showStatus('Browser open error: ' + result.message, 'error');
+                    }
+                } else {
+                    showStatus('Error: electronAPI not available', 'error');
+                }
+            } catch (error) {
+                console.error('Browser open error:', error);
+                showStatus('Browser open error', 'error');
+            }
+        }
+
+        // NEW - Close browser manually
+        async function closeBrowser() {
+            try {
+                if (window.electronAPI && window.electronAPI.closeComfyUIBrowser) {
+                    const result = await window.electronAPI.closeComfyUIBrowser();
+                    
+                    if (result.success) {
+                        showStatus(translations[currentLang].browser_closed, 'success');
+                        setBrowserOpen(false);
+                    } else {
+                        showStatus('Browser close error: ' + result.message, 'error');
+                    }
+                } else {
+                    showStatus('Error: electronAPI not available', 'error');
+                }
+            } catch (error) {
+                console.error('Browser close error:', error);
+                showStatus('Browser close error', 'error');
             }
         }
 
@@ -999,7 +1235,7 @@
             }
         }
 
-        // Get configuration from form
+        // Get configuration from form with NEW browser settings
         function getConfigFromForm() {
             return {
                 language: document.getElementById('languageSelect').value,
@@ -1020,11 +1256,19 @@
                 disable_auto_launch: document.getElementById('disableAuto').checked,
                 port: document.getElementById('port').value,
                 listen: document.getElementById('listen').value,
-                extra_args: document.getElementById('extraArgs').value
+                extra_args: document.getElementById('extraArgs').value,
+                // NEW - Browser settings from form
+                browser_settings: {
+                    auto_open: document.getElementById('browserAutoOpen').checked,
+                    window_width: parseInt(document.getElementById('browserWidth').value) || 1400,
+                    window_height: parseInt(document.getElementById('browserHeight').value) || 900,
+                    remember_position: document.getElementById('browserRememberPosition').checked,
+                    always_on_top: document.getElementById('browserAlwaysOnTop').checked
+                }
             };
         }
 
-        // Update form from configuration
+        // Update form from configuration with NEW browser fields
         function updateFormFromConfig() {
             document.getElementById('languageSelect').value = currentConfig.language || 'en';
             document.getElementById('comfyuiPath').value = currentConfig.comfyui_path || '';
@@ -1046,11 +1290,19 @@
             document.getElementById('listen').value = currentConfig.listen || '127.0.0.1';
             document.getElementById('extraArgs').value = currentConfig.extra_args || '';
             
+            // NEW - Browser settings
+            const browserSettings = currentConfig.browser_settings || {};
+            document.getElementById('browserAutoOpen').checked = browserSettings.auto_open !== false; // Default true
+            document.getElementById('browserWidth').value = browserSettings.window_width || 1400;
+            document.getElementById('browserHeight').value = browserSettings.window_height || 900;
+            document.getElementById('browserRememberPosition').checked = browserSettings.remember_position !== false; // Default true
+            document.getElementById('browserAlwaysOnTop').checked = browserSettings.always_on_top || false;
+            
             // Update current language
             currentLang = currentConfig.language || 'en';
         }
 
-        // Setup event listeners
+        // Setup event listeners with NEW browser events
         function setupEventListeners() {
             // Apply button
             document.getElementById('applyBtn').addEventListener('click', applySettings);
@@ -1060,6 +1312,10 @@
             
             // Browse button
             document.getElementById('browsePath').addEventListener('click', browsePath);
+            
+            // NEW - Browser control buttons
+            document.getElementById('openBrowserBtn').addEventListener('click', openBrowser);
+            document.getElementById('closeBrowserBtn').addEventListener('click', closeBrowser);
             
             // Language change
             document.getElementById('languageSelect').addEventListener('change', async (e) => {
@@ -1087,6 +1343,7 @@
                     window.electronAPI.onComfyUIExit((code) => {
                         showStatus(`ComfyUI finished with code: ${code}`, code === 0 ? 'success' : 'error');
                         setComfyUIRunning(false);
+                        setBrowserOpen(false);
                     });
                 }
 
@@ -1097,7 +1354,7 @@
                     });
                 }
 
-                // NEW - Process state events
+                // Process state events
                 if (window.electronAPI.onComfyUIStarted) {
                     window.electronAPI.onComfyUIStarted(() => {
                         setComfyUIRunning(true);
@@ -1108,7 +1365,16 @@
                 if (window.electronAPI.onComfyUIStopped) {
                     window.electronAPI.onComfyUIStopped(() => {
                         setComfyUIRunning(false);
+                        setBrowserOpen(false);
                         showStatus(translations[currentLang].comfyui_stopped, 'success');
+                    });
+                }
+
+                // NEW - Browser events
+                if (window.electronAPI.onComfyUIBrowserClosed) {
+                    window.electronAPI.onComfyUIBrowserClosed(() => {
+                        setBrowserOpen(false);
+                        showStatus(translations[currentLang].browser_closed, 'success');
                     });
                 }
             }
@@ -1173,7 +1439,7 @@
             }
         }
 
-        // Update UI with translations - FIXED FUNCTION
+        // Update UI with translations
         function updateUI() {
             const currentTranslations = translations[currentLang];
             
@@ -1181,7 +1447,7 @@
             document.querySelectorAll('[data-text]').forEach(element => {
                 const key = element.getAttribute('data-text');
                 if (currentTranslations[key]) {
-                    if (element.tagName === 'INPUT' && element.type === 'text') {
+                    if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'password')) {
                         element.placeholder = currentTranslations[key];
                     } else if (element.tagName === 'TEXTAREA') {
                         element.placeholder = currentTranslations[key];
@@ -1207,6 +1473,7 @@
             
             // Update control buttons with new language
             updateControlButtons();
+            updateBrowserButtons(); // NEW
             
             // Re-validate path with new language
             if (currentConfig.comfyui_path) {
