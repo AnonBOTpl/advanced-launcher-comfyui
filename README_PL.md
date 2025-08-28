@@ -18,6 +18,12 @@ Projekt pozwala szybko startować, konfigurować oraz kontrolować środowisko p
   - proste GUI do zarządzania konfiguracją,
   - przyciski do uruchamiania, zatrzymywania i instalowania zależności,
   - wyświetlanie logów oraz komunikatów błędów/informacji.
+- **Wbudowana Przeglądarka!
+  - Automatyczne otwieranie przeglądarki przy starcie
+  - Personalizacja rozmiaru okna (szerokość i wysokość).
+  - Zapamiętywanie ostatniej pozycji okna.
+  - Opcja "Zawsze na wierzchu".
+  - Ręczne przyciski do otwierania i zamykania przeglądarki.
 
 
 ## Instalacja
